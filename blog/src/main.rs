@@ -33,9 +33,10 @@ fn convert_into_post(paragraphs: Vec<&str>)->String{
 }
 //function: write into file
 fn write_into_file(path:String,stuff:String){
-    fs::write(path,stuff);
-
+    fs::write(path,stuff).expect("Should have been able to write to the file");
 }
+//    fs::read_dir();
+
 //main: reads files from directory (supplied in .env or in arguments? assume . at first, NON RECURSIVE FOR STARTERS)
 fn main() {
     let mut path = String::from("text.txt");

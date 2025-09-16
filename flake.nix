@@ -26,6 +26,7 @@
             packages = [
               pkgs.rustfmt
               pkgs.cargo
+              pkgs.gcc15
             ];
           };
         }
