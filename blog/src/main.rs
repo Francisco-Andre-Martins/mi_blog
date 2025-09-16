@@ -1,4 +1,4 @@
-use std::{fs};
+use std::{fs,env};
 //function: read from file (reads from given path, returns string)
 fn read_from_file(path_to_read:String)->String{
     
@@ -38,13 +38,38 @@ fn write_into_file(path:String,stuff:String){
 //    fs::read_dir();
 
 //main: reads files from directory (supplied in .env or in arguments? assume . at first, NON RECURSIVE FOR STARTERS)
+
 fn main() {
-    let mut path = String::from("text.txt");
-    let stuff=read_from_file(path.clone());
-    let paragraphs: Vec<&str>= stuff.split('\n').collect();
-    let validhtml: String= convert_into_post(paragraphs);
-    path.push_str(".html");
-    write_into_file(path, validhtml);
-    println!("{stuff}");
-    println!("Hello, world!");
+    let args: Vec<String>=env::args().collect();
+    if args.len()!=3{
+        
+        let num= args.len();
+        println!("{num}");
+        for arg in args{
+            println!("{arg}")
+        }
+        println!("WRONG NUMBER OF ARGUMENTS FIRST IS THE INPUT DIRECTORY, SECOND THE OUTPUT");
+        return
+    }
+    let paths = fs::read_dir(args[1].clone()).unwrap();
+
+    let outputdir =&args[2];
+    for path in paths {
+            let mut new_path=path.unwrap();
+            if !new_path.path().is_dir(){
+                let mut name=  new_path.path().into_os_string().into_string().unwrap();
+                let stuff=read_from_file(name.clone());
+                let paragraphs: Vec<&str>= stuff.split('\n').collect();
+                let validhtml: String= convert_into_post(paragraphs);
+                let mut new_name=String::from(outputdir);
+                new_name.push('/');
+                new_name.push_str(&new_path.file_name().into_string().unwrap());
+                new_name.push_str(".html");
+                write_into_file(new_name, validhtml); 
+            }
+
+
+
+    }
+    println!("this didn't blow up (surprisingly)");
 }
