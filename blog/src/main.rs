@@ -12,7 +12,7 @@ fn read_from_file(path_to_read:String)->String{
 //     returnstuff
 // }
 //function: convert into HTML
-fn convert_into_HTML(paragraphs: Vec<&str>)->String{
+fn convert_into_post(paragraphs: Vec<&str>)->String{
     let mut returnstuff= String::new();
     returnstuff.push_str("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"style.css\"><title>Stuff </title></head><body>");
     let mut isfirst=true;
@@ -36,12 +36,12 @@ fn write_into_file(path:String,stuff:String){
     fs::write(path,stuff);
 
 }
-//main: reads files from directory (supplied in .env? assume . at first, NON RECURSIVE FOR STARTERS)
+//main: reads files from directory (supplied in .env or in arguments? assume . at first, NON RECURSIVE FOR STARTERS)
 fn main() {
     let mut path = String::from("text.txt");
     let stuff=read_from_file(path.clone());
     let paragraphs: Vec<&str>= stuff.split('\n').collect();
-    let validhtml: String= convert_into_HTML(paragraphs);
+    let validhtml: String= convert_into_post(paragraphs);
     path.push_str(".html");
     write_into_file(path, validhtml);
     println!("{stuff}");
