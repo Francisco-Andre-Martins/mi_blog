@@ -14,6 +14,7 @@
         "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      pkgsFor = nixpkgs.legacyPackages;
     in
     {
       devShells = forAllSystems (
@@ -22,13 +23,10 @@
           pkgs = nixpkgs.legacyPackages.${system};
         in
         {
-          default = pkgs.mkShellNoCC {
-            packages = [
-              pkgs.rustfmt
-              pkgs.cargo
-              pkgs.gcc15
-            ];
-          };
+          packages = forAllSystems (system: {
+            default = pkgsFor.${system}.callPackage ./. { };
+          });
+
         }
       );
 
