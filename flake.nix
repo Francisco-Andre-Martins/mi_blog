@@ -18,7 +18,8 @@
     in
     {
       packages = forAllSystems (system: {
-        default = pkgsFor.${system}.callPackage ./. { };
+        mi-blog = pkgsFor.${system}.callPackage ./. { };
+        default =self.packages.${system}.agenix;
       });
       
 
