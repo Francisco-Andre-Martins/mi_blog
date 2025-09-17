@@ -1,4 +1,4 @@
-use std::{fs,env};
+use std::{fs,env,fs::DirEntry};
 fn directory_creator()->String{
     String::from("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body> <ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\"><h1>Posts</h1>")
 
@@ -71,10 +71,10 @@ fn main() {
         return
     }
     let paths = fs::read_dir(args[1].clone()).unwrap();
-
     let outputdir =&args[2];
+    let mut body = String::new();
     let mut directory_page=directory_creator();
-
+    
     //This part of the code will assemble the content pages
     for path in paths {
             let mut new_path=path.unwrap();
@@ -89,11 +89,14 @@ fn main() {
                 new_name.push('/');
                 new_name.push_str(&new_path.file_name().into_string().unwrap());
                 new_name.push_str(".html");
-                directory_page.push_str(&add_link_to_directory(String::from(&new_path.file_name().into_string().unwrap()),paragraphs[0]));
+                let mut new_body:String=add_link_to_directory(String::from(&new_path.file_name().into_string().unwrap()),paragraphs[0]);
+                new_body.push_str(&body);
+                body=new_body;
                 let validhtml: String= convert_into_post(paragraphs);
                 write_into_file(new_name, validhtml); 
             }
     }
+    directory_page.push_str(&body);
     directory_page.push_str(&end_directory()); 
     let mut directory_path = String::from(outputdir);
     println!("I am yelling this {directory_path}");
