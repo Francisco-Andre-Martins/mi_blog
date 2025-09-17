@@ -17,18 +17,10 @@
       pkgsFor = nixpkgs.legacyPackages;
     in
     {
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          packages = forAllSystems (system: {
-            default = pkgsFor.${system}.callPackage ./. { };
-          });
-
-        }
-      );
+      packages = forAllSystems (system: {
+        default = pkgsFor.${system}.callPackage ./. { };
+      });
+      
 
     };
 }
