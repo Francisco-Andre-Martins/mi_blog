@@ -19,7 +19,7 @@
     {
       packages = forAllSystems (system: {
         mi-blog = pkgsFor.${system}.callPackage ./. { };
-        default =self.packages.${system}.agenix;
+        default =self.packages.${system}.mi-blog;
       });
       
 
