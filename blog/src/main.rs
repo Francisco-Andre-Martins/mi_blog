@@ -1,6 +1,6 @@
 use std::{fs,env};
 fn directory_creator()->String{
-    String::from("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body> <ul class=\"header\"><li><a href=\"./index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\"><h1>Posts</h1>")
+    String::from("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body> <ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\"><h1>Posts</h1>")
 
 }
 fn add_link_to_directory(path:String, pagetitle:&str)->String{
@@ -33,7 +33,7 @@ fn read_from_file(path_to_read:String)->String{
 //function: convert into HTML
 fn convert_into_post(paragraphs: Vec<&str>)->String{
     let mut returnstuff= String::new();
-    returnstuff.push_str("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body><ul class=\"header\"><li><a href=\"./index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\">");
+    returnstuff.push_str("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body><ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\">");
     let mut isfirst=true;
     for el in paragraphs{
         if isfirst{
