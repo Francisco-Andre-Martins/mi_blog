@@ -33,7 +33,7 @@ fn read_from_file(path_to_read:String)->String{
 //function: convert into HTML
 fn convert_into_post(paragraphs: Vec<&str>)->String{
     let mut returnstuff= String::new();
-    returnstuff.push_str("<!DOCTYPE html> <html lang=\"pt\"> <head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body><ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\">");
+    returnstuff.push_str("<!DOCTYPE html> <html lang=\"pt\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" /><head><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body><ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\">");
     let mut isfirst=true;
     for el in paragraphs{
         if isfirst{
