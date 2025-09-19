@@ -1,4 +1,4 @@
-use std::{fs,env,fs::DirEntry};
+use std::{fs,env,time::SystemTime};
 fn directory_creator()->String{
     String::from("<!DOCTYPE html> <html lang=\"pt\"> <head> <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" /><meta charset=\"UTF-8\"><link rel=\"stylesheet\" href=\"../style.css\"><title>Stuff </title></head><body> <ul class=\"header\"><li><a href=\"../index.html\"> Francisco Martins</a></li><li><a href=\"../pages/directory.html\">Blog</a></li></ul><div class=\"content\"><h1>Posts</h1>")
 
@@ -12,7 +12,7 @@ fn add_link_to_directory(path:String, pagetitle:&str)->String{
 
     return_string.push_str(">");
     return_string.push_str(&pagetitle);
-    return_string.push_str("<a>");
+    return_string.push_str("</a>");
     return return_string;
 }
 fn end_directory()->String{
@@ -25,6 +25,7 @@ fn read_from_file(path_to_read:String)->String{
     contents
 
 }
+
 //function: parse into paragraphs
 // fn parse_into_paragraphs(stuff:String, backstuff:Vec<&str>)->Vec<&str>{
 //     let returnstuff:Vec<&str> = stuff.split('\n').collect();
@@ -72,31 +73,33 @@ fn main() {
     }
     let paths = fs::read_dir(args[1].clone()).unwrap();
     let outputdir =&args[2];
-    let mut body = String::new();
     let mut directory_page=directory_creator();
-    
+    // new paths is (path, title, creation time)
+    let mut new_paths :Vec<(String,String,SystemTime)>= Vec::new();
     //This part of the code will assemble the content pages
     for path in paths {
-            let mut new_path=path.unwrap();
+            let new_path=path.unwrap();
             if !new_path.path().is_dir(){
                 let name=  new_path.path().into_os_string().into_string().unwrap();
 
                 let stuff=read_from_file(name.clone());
                 let paragraphs: Vec<&str>= stuff.split('\n').collect();
-
+                
  
                 let mut new_name=String::from(outputdir);
                 new_name.push('/');
                 new_name.push_str(&new_path.file_name().into_string().unwrap());
                 new_name.push_str(".html");
-                let mut new_body:String=add_link_to_directory(String::from(&new_path.file_name().into_string().unwrap()),paragraphs[0]);
-                new_body.push_str(&body);
-                body=new_body;
+                new_paths.push((new_path.file_name().into_string().unwrap(),String::from(paragraphs[0]),new_path.metadata().unwrap().created().unwrap()));
+
                 let validhtml: String= convert_into_post(paragraphs);
                 write_into_file(new_name, validhtml); 
             }
     }
-    directory_page.push_str(&body);
+    new_paths.sort_by(|a,b| a.2.partial_cmp(&b.2).unwrap());
+    for other_path in new_paths{
+        directory_page.push_str(&add_link_to_directory(other_path.0, other_path.1.as_str() ));
+    }
     directory_page.push_str(&end_directory()); 
     let mut directory_path = String::from(outputdir);
     println!("I am yelling this {directory_path}");
