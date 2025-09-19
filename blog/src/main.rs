@@ -96,7 +96,7 @@ fn main() {
                 write_into_file(new_name, validhtml); 
             }
     }
-    new_paths.sort_by(|a,b| a.2.partial_cmp(&b.2).unwrap());
+    new_paths.sort_by(|a,b| b.2.partial_cmp(&a.2).unwrap());
     for other_path in new_paths{
         directory_page.push_str(&add_link_to_directory(other_path.0, other_path.1.as_str() ));
     }
