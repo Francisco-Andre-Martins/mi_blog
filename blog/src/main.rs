@@ -60,6 +60,7 @@ fn write_into_file(path:String,stuff:String){
 //main: reads files from directory (supplied in .env or in arguments? assume . at first, NON RECURSIVE FOR STARTERS)
 
 fn main() {
+    let domain : &str = "https://francisco.martins.com.pt";
     let args: Vec<String>=env::args().collect();
     if args.len()!=3{
         
@@ -74,6 +75,7 @@ fn main() {
     let paths = fs::read_dir(args[1].clone()).unwrap();
     let outputdir =&args[2];
     let mut directory_page=directory_creator();
+    let mut sitemap : String =String::from("");
     // new paths is (path, title, creation time)
     let mut new_paths :Vec<(String,String,SystemTime)>= Vec::new();
     //This part of the code will assemble the content pages
@@ -98,12 +100,18 @@ fn main() {
     }
     new_paths.sort_by(|a,b| b.2.partial_cmp(&a.2).unwrap());
     for other_path in new_paths{
+        sitemap.push_str(domain);
+        sitemap.push_str("/");
+        sitemap.push_str(&other_path.0);
+        sitemap.push_str("\n");
         directory_page.push_str(&add_link_to_directory(other_path.0, other_path.1.as_str() ));
     }
     directory_page.push_str(&end_directory()); 
     let mut directory_path = String::from(outputdir);
     println!("I am yelling this {directory_path}");
     directory_path.push_str("/directory.html");
+    let sitemap_path = String::from("sitemap");
+    write_into_file(sitemap_path, sitemap);
     write_into_file(directory_path, directory_page);
     //This part of the code assembles the directory
     //I first want to see what the default sort order is
